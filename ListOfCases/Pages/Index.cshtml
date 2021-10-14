@@ -1,0 +1,96 @@
+﻿@page
+@model ListOfCases.Pages.IndexModel
+@{
+}
+
+<div id="app" class="container">
+    <div v-if="!editing">
+        <button class="button" @@click="newAppeal">Новое обращение</button>
+        <p class="mt-3"><input type="text" v-model="search"/></p><br/>
+        <table class="table">
+            <tr>
+                <th>Id</th>
+                <th>Страна</th>
+                <th>Регион</th>
+                <th>Город</th>
+                <th>Телефон</th>
+                <th>Причина</th>
+                <th>Направление</th>
+                <th>Дата</th>
+                <th></th>
+                <th></th>
+            </tr>
+            <tr v-for="(appeal, index) in filteredAppeals">
+                <td>{{appeal.id}}</td>
+                <td>{{appeal.country}}</td>
+                <td>{{appeal.region}}</td>
+                <td>{{appeal.city}}</td>
+                <td>{{appeal.phone}}</td>
+                <td>{{appeal.reason}}</td>
+                <td>{{appeal.department}}</td>
+                <td>{{appeal.time}}</td>
+                <td><a class="button is-small is-dark" @@click="editAppeal(appeal.id, index)">Править</a></td>
+                <td><a class="button is-small is-dark" @@click="deleteAppeal(appeal.id, index)">Удалить</a></td>
+            </tr>
+        </table>
+    </div>
+    <div v-else>
+
+        <div class="field">
+            <label class="label">Страна</label>
+            <div class="control">
+                <select v-model.number="appealModel.country" required="required">
+                    @foreach (var c in Model.Countries)
+                    {
+                        <option value="@c.Id">@c.Name</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="label">Регион</label>
+            <div class="control">
+                <input class="input" v-model="appealModel.region" required="required"/>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="label">Город</label>
+            <div class="control">
+                <input class="input" v-model="appealModel.city" required="required"/>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="label">Телефон</label>
+            <div class="control">
+                <input class="input" v-model="appealModel.phone" required="required"/>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="label">Причина</label>
+            <div class="control">
+                <input class="input" v-model="appealModel.reason" required="required"/>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="label">Направление</label>
+            <div class="control">
+                <select v-model.number="appealModel.department" required="required">
+                    @foreach (var c in Model.Department)
+                    {
+                        <option value="@c.GetHashCode()">@c.ToString()</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <button class="button is-success" @@click="createAppeal" v-if="!appealModel.id">Создать</button>
+        <button class="button is-warning" @@click="updateAppeal" v-else>Сохранить</button>
+        <button class="button" @@click="cancel">Отмена</button>
+
+    </div>
+</div>
